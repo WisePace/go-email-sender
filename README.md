@@ -57,7 +57,7 @@ The application reads a list of emails from a text file (db.txt), validates them
 
     The application will:
 
-<ol><li>Read and validate email addresses from db.txt.</li>
+<ol><li>Read and validate email addresses from db.txt. </li>
     <li>Read the email body from letter.txt.</li>
     <li>Send the email to all valid email addresses concurrently (with a limit on the number of concurrent goroutines).</li>
     </ol>
