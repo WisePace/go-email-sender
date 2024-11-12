@@ -1,4 +1,5 @@
-#Pace Email Sender
+
+# Pace Email Sender
 
 Pace Email Sender is a Go-based application designed to send emails to a list of valid email addresses.
 The application reads a list of emails from a text file (db.txt), validates them, and then sends a predefined email message to those recipients using SMTP (Gmail's SMTP server).
