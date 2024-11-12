@@ -6,9 +6,9 @@ The application reads a list of emails from a text file (db.txt), validates them
 
 ## Features
 
-- **Email Validation: ** Validates email addresses using regex.
+- **Email Validation:** Validates email addresses using regex.
 - **Concurrent Email Sending:** Sends emails concurrently with a controlled concurrency limit to avoid overwhelming the SMTP server.
-- **Message Body: ** Email content is read from a file (letter.txt), so you can easily customize the message.
+- **Message Body:** Email content is read from a file (letter.txt), so you can easily customize the message.
 
 ## Setup
 
