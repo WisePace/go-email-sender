@@ -6,19 +6,11 @@ import (
 	"log"
 	"net/smtp"
 	"os"
+	"pace-sender/configuration"
 	"sync"
 )
 
-const (
-	smtpHost       = "smtp.gmail.com"
-	smtpPort       = "587"
-	maxConcurrency = 20
-)
-
-func SendEmail(to []string, subject, body string) error {
-	sender := ""   // your gmail account
-	password := "" // app-specific password for Gmail
-
+func SendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort string) error {
 	msg := "From: " + sender + "\n" +
 		"To: " + to[0] + "\n" +
 		"Subject: " + subject + "\n\n" +
@@ -30,13 +22,12 @@ func SendEmail(to []string, subject, body string) error {
 	if err != nil {
 		return err
 	}
-
 	fmt.Println("Email sent successfully:", to[0])
 	return nil
 }
 
-func SendEmailsToValidRecipients(validEmails []string) error {
-	messageFile, err := os.Open("letter.txt")
+func SendEmailsToValidRecipients(validEmails []string, config *configuration.Config) error {
+	messageFile, err := os.Open(config.MessageFilePath)
 	if err != nil {
 		return fmt.Errorf("error opening message file: %v", err)
 	}
@@ -53,17 +44,17 @@ func SendEmailsToValidRecipients(validEmails []string) error {
 	}
 
 	var wg sync.WaitGroup
-	semaphore := make(chan struct{}, maxConcurrency)
+	buffer := make(chan struct{}, config.ParallelEmailCount)
 
 	for _, email := range validEmails {
 		wg.Add(1)
-		semaphore <- struct{}{}
+		buffer <- struct{}{} // Limit concurrency
 
 		go func(recipient string) {
 			defer wg.Done()
-			defer func() { <-semaphore }()
-			subject := "Wisespace"
-			err := SendEmail([]string{recipient}, subject, body)
+			defer func() { <-buffer }() // Release slot for the next goroutine
+
+			err := SendEmail([]string{recipient}, config.EmailSubject, body, config.SMTPSender, config.SMTPPassword, config.SMTPHost, config.SMTPPort)
 			if err != nil {
 				log.Printf("Error sending email to %s: %v", recipient, err)
 			}
@@ -72,4 +63,12 @@ func SendEmailsToValidRecipients(validEmails []string) error {
 
 	wg.Wait()
 	return nil
+}
+
+func InitEmailSender() (*configuration.Config, error) {
+	config, err := configuration.LoadConfig()
+	if err != nil {
+		return nil, fmt.Errorf("could not load config: %v", err)
+	}
+	return config, nil
 }

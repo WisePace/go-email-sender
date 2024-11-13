@@ -6,13 +6,18 @@ import (
 )
 
 func main() {
-	validEmails, err := email.GetValidEmails()
+	config, err := email.InitEmailSender()
 	if err != nil {
-		log.Fatalf("Error validating emails: %v", err)
+		log.Fatal("Error loading email configuration: ", err)
 	}
 
-	err = email.SendEmailsToValidRecipients(validEmails)
+	validEmails, err := email.GetValidEmails()
 	if err != nil {
-		log.Fatalf("Error sending emails: %v", err)
+		log.Fatal("Error fetching valid emails: ", err)
+	}
+
+	err = email.SendEmailsToValidRecipients(validEmails, config)
+	if err != nil {
+		log.Fatal("Error sending emails: ", err)
 	}
 }

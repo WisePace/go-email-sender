@@ -3,14 +3,20 @@ package email
 import (
 	"bufio"
 	"fmt"
+	"github.com/spf13/viper"
 	"os"
 	"regexp"
 )
 
 func GetValidEmails() ([]string, error) {
-	file, err := os.Open("db.txt")
+	emailsFilePath := viper.GetString("EMAILS_LIST")
+	if emailsFilePath == "" {
+		emailsFilePath = "db.txt"
+	}
+
+	file, err := os.Open(emailsFilePath)
 	if err != nil {
-		return nil, fmt.Errorf("error opening file: %v", err)
+		return nil, fmt.Errorf("error opening file %s: %v", emailsFilePath, err)
 	}
 	defer file.Close()
 
@@ -28,7 +34,7 @@ func GetValidEmails() ([]string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("error reading file: %v", err)
+		return nil, fmt.Errorf("error reading file %s: %v", emailsFilePath, err)
 	}
 
 	return validEmails, nil
