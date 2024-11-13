@@ -18,8 +18,7 @@ func SendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort 
 
 	auth := smtp.PlainAuth("", sender, password, smtpHost)
 
-	err := smtp.SendMail(smtpHost+":"+smtpPort, auth, sender, to, []byte(msg))
-	if err != nil {
+	if err := smtp.SendMail(smtpHost+":"+smtpPort, auth, sender, to, []byte(msg)); err != nil {
 		return err
 	}
 	fmt.Println("Email sent successfully:", to[0])
