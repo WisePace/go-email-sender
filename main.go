@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"pace-sender/pkg/email"
 )
@@ -15,9 +14,5 @@ func main() {
 	err = email.SendEmailsToValidRecipients(validEmails)
 	if err != nil {
 		log.Fatalf("Error sending emails: %v", err)
-	}
-
-	if err == nil {
-		fmt.Println("Letter was sent")
 	}
 }
