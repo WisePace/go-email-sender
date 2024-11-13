@@ -55,9 +55,10 @@ The application reads a list of emails from a text file (db.txt), validates them
 
 ```
 go run main.go
+
 ```
 
-    The application will:
+The application will:
 
 <ol><li>Read and validate email addresses from db.txt. </li>
     <li>Read the email body from letter.txt.</li>
