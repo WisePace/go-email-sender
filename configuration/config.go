@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
-	"log"
 	"strconv"
 )
 
@@ -26,16 +25,9 @@ func Load() (*Config, error) {
 
 	viper.AutomaticEnv()
 
-	parallelEmailCountString := viper.GetString("PARALLEL_EMAIL_COUNT")
-	parallelEmailCount := 20
-
-	if parallelEmailCountString != "" {
-		parsedValue, err := strconv.Atoi(parallelEmailCountString)
-		if err != nil {
-			log.Printf("Invalid PARALLEL_EMAIL_COUNT value '%s', using default: %d", parallelEmailCountString, parallelEmailCount)
-		} else {
-			parallelEmailCount = parsedValue
-		}
+	parallelEmailEnv, err := strconv.Atoi(viper.GetString("PARALLEL_EMAIL_COUNT"))
+	if err != nil || parallelEmailEnv == 0 {
+		parallelEmailEnv = 20
 	}
 
 	return &Config{
@@ -43,7 +35,7 @@ func Load() (*Config, error) {
 		SMTPPort:           viper.GetString("SMTP_PORT"),
 		SMTPSender:         viper.GetString("SMTP_SENDER"),
 		SMTPPassword:       viper.GetString("SMTP_PASSWORD"),
-		ParallelEmailCount: parallelEmailCount,
+		ParallelEmailCount: parallelEmailEnv,
 		EmailsList:         viper.GetString("EMAILS_LIST"),
 		MessageFilePath:    viper.GetString("MESSAGE_FILE_PATH"),
 		EmailSubject:       viper.GetString("EMAIL_SUBJECT"),
