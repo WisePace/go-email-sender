@@ -2,11 +2,12 @@ package main
 
 import (
 	"log"
+	"pace-sender/configuration"
 	"pace-sender/pkg/email"
 )
 
 func main() {
-	config, err := email.InitEmailSender()
+	config, err := configuration.Load()
 	if err != nil {
 		log.Fatal("Error loading email configuration: ", err)
 	}

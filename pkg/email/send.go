@@ -63,11 +63,3 @@ func SendEmailsToValidRecipients(validEmails []string, config *configuration.Con
 	wg.Wait()
 	return nil
 }
-
-func InitEmailSender() (*configuration.Config, error) {
-	config, err := configuration.LoadConfig()
-	if err != nil {
-		return nil, fmt.Errorf("could not load config: %v", err)
-	}
-	return config, nil
-}
