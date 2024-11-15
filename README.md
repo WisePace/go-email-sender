@@ -2,7 +2,7 @@
 # Pace Email Sender
 
 Pace Email Sender is a Go-based application designed to send emails to a list of valid email addresses.
-The application reads a list of emails from a text file (db.txt), validates them, and then sends a predefined email message to those recipients using SMTP (Gmail's SMTP server).
+The application reads a list of emails from a text file (db.txt), validates them, and then sends a predefined email message to those recipients using SMTP.
 
 ## Features
 
@@ -40,13 +40,13 @@ The application reads a list of emails from a text file (db.txt), validates them
 ```
 
 
-**Update the main.go file with your Gmail account details and app-specific password:**
+**Update your .env file with your SMTP server details:**
 
 ```
-    smtpHost := "smtp.gmail.com"
-    smtpPort := "587"
-    sender := "your-email@gmail.com"   // Your Gmail account
-    password := "your-app-password"    // App-specific password for Gmail
+    SMTP_HOST=smtp.example.com       # Your SMTP server (e.g., smtp.gmail.com, smtp.mail.yahoo.com)
+    SMTP_PORT=587                    # SMTP server port (e.g., 587 for TLS, 465 for SSL)
+    SMTP_SENDER=your-email@example.com  # Your email address
+    SMTP_PASSWORD=your-email-password   # Your email account password or app-specific password
 ```
 
 ## Running the Application
@@ -57,10 +57,3 @@ The application reads a list of emails from a text file (db.txt), validates them
 go run main.go
 
 ```
-
-The application will:
-
-<ol><li>Read and validate email addresses from db.txt. </li>
-    <li>Read the email body from letter.txt.</li>
-    <li>Send the email to all valid email addresses concurrently (with a limit on the number of concurrent goroutines).</li>
-    </ol>
