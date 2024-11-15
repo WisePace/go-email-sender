@@ -19,7 +19,7 @@ type Config struct {
 	EmailSubject       string
 }
 
-func LoadConfig() (*Config, error) {
+func Load() (*Config, error) {
 	if err := godotenv.Load(); err != nil {
 		return nil, fmt.Errorf("failed to load .env file: %v", err)
 	}

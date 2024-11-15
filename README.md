@@ -44,7 +44,7 @@ The application reads a list of emails from a text file (db.txt), validates them
 
 ```
     SMTP_HOST=smtp.example.com       # Your SMTP server (e.g., smtp.gmail.com, smtp.mail.yahoo.com)
-    SMTP_PORT=587                    # SMTP server port (e.g., 587 for TLS, 465 for SSL)
+    SMTP_PORT=587                    # SMTP server port
     SMTP_SENDER=your-email@example.com  # Your email address
     SMTP_PASSWORD=your-email-password   # Your email account password or app-specific password
 ```
