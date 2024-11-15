@@ -10,21 +10,6 @@ import (
 	"sync"
 )
 
-func SendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort string) error {
-	msg := "From: " + sender + "\n" +
-		"To: " + to[0] + "\n" +
-		"Subject: " + subject + "\n\n" +
-		body
-
-	auth := smtp.PlainAuth("", sender, password, smtpHost)
-
-	if err := smtp.SendMail(smtpHost+":"+smtpPort, auth, sender, to, []byte(msg)); err != nil {
-		return err
-	}
-	fmt.Println("Email sent successfully:", to[0])
-	return nil
-}
-
 func SendEmailsToValidRecipients(validEmails []string, config *configuration.Config) error {
 	messageFile, err := os.Open(config.MessageFilePath)
 	if err != nil {
@@ -61,5 +46,20 @@ func SendEmailsToValidRecipients(validEmails []string, config *configuration.Con
 	}
 
 	wg.Wait()
+	return nil
+}
+func sendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort string) error {
+	msg := "From: " + sender + "\n" +
+		"To: " + to[0] + "\n" +
+		"Subject: " + subject + "\n\n" +
+		body
+
+	auth := smtp.PlainAuth("", sender, password, smtpHost)
+
+	if err := smtp.SendMail(smtpHost+":"+smtpPort, auth, sender, to, []byte(msg)); err != nil {
+		return err
+	}
+
+	fmt.Println("Email sent successfully:", to[0])
 	return nil
 }
