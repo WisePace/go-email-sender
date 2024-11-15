@@ -3,26 +3,25 @@ package email
 import (
 	"bufio"
 	"fmt"
-	"github.com/spf13/viper"
 	"os"
+	"pace-sender/configuration"
 	"regexp"
 )
 
-func GetValidEmails() ([]string, error) {
-	emailsFilePath := viper.GetString("EMAILS_LIST")
-	if emailsFilePath == "" {
-		emailsFilePath = "db.txt"
+func GetValidEmails(config *configuration.Config) ([]string, error) {
+	if config.EmailsList == "" {
+		config.EmailsList = "db.txt"
 	}
 
-	file, err := os.Open(emailsFilePath)
+	emailsFile, err := os.Open(config.EmailsList)
 	if err != nil {
-		return nil, fmt.Errorf("error opening file %s: %v", emailsFilePath, err)
+		return nil, fmt.Errorf("error opening file %s: %v", config.EmailsList, err)
 	}
-	defer file.Close()
+	defer emailsFile.Close()
 
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	var validEmails []string
-	scanner := bufio.NewScanner(file)
+	scanner := bufio.NewScanner(emailsFile)
 
 	for scanner.Scan() {
 		email := scanner.Text()
@@ -34,7 +33,7 @@ func GetValidEmails() ([]string, error) {
 	}
 
 	if err := scanner.Err(); err != nil {
-		return nil, fmt.Errorf("error reading file %s: %v", emailsFilePath, err)
+		return nil, fmt.Errorf("error reading file %s: %v", config.EmailsList, err)
 	}
 
 	return validEmails, nil

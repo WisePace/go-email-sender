@@ -11,6 +11,10 @@ import (
 )
 
 func SendEmailsToValidRecipients(validEmails []string, config *configuration.Config) error {
+	if config.MessageFilePath == "" {
+		config.MessageFilePath = "letters.txt"
+	}
+
 	messageFile, err := os.Open(config.MessageFilePath)
 	if err != nil {
 		return fmt.Errorf("error opening message file: %v", err)
@@ -38,7 +42,7 @@ func SendEmailsToValidRecipients(validEmails []string, config *configuration.Con
 			defer wg.Done()
 			defer func() { <-buffer }() // Release slot for the next goroutine
 
-			err := SendEmail([]string{recipient}, config.EmailSubject, body, config.SMTPSender, config.SMTPPassword, config.SMTPHost, config.SMTPPort)
+			err := sendEmail([]string{recipient}, config.EmailSubject, body, config.SMTPSender, config.SMTPPassword, config.SMTPHost, config.SMTPPort)
 			if err != nil {
 				log.Printf("Error sending email to %s: %v", recipient, err)
 			}
