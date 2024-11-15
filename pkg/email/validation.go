@@ -20,9 +20,10 @@ func GetValidEmails(config *configuration.Config) ([]string, error) {
 	defer emailsFile.Close()
 
 	emailRegex := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
-	var validEmails []string
+
 	scanner := bufio.NewScanner(emailsFile)
 
+	var validEmails []string
 	for scanner.Scan() {
 		email := scanner.Text()
 		if emailRegex.MatchString(email) {
