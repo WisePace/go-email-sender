@@ -17,8 +17,8 @@ func main() {
 		log.Fatal("Error fetching valid emails: ", err)
 	}
 
-	err = email.SendEmailsToValidRecipients(validEmails, config)
-	if err != nil {
+	if err = email.SendEmailsToValidRecipients(validEmails, config); err != nil {
 		log.Fatal("Error sending emails: ", err)
 	}
+
 }
