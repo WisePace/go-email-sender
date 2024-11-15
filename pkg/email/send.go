@@ -42,14 +42,14 @@ func SendEmailsToValidRecipients(validEmails []string, config *configuration.Con
 			defer wg.Done()
 			defer func() { <-buffer }() // Release slot for the next goroutine
 
-			err := sendEmail([]string{recipient}, config.EmailSubject, body, config.SMTPSender, config.SMTPPassword, config.SMTPHost, config.SMTPPort)
-			if err != nil {
+			if err := sendEmail([]string{recipient}, config.EmailSubject, body, config.SMTPSender, config.SMTPPassword, config.SMTPHost, config.SMTPPort); err != nil {
 				log.Printf("Error sending email to %s: %v", recipient, err)
 			}
 		}(email)
 	}
 
 	wg.Wait()
+
 	return nil
 }
 func sendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort string) error {
