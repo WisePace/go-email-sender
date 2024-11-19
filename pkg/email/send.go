@@ -52,6 +52,7 @@ func SendEmailsToValidRecipients(validEmails []string, config *configuration.Con
 
 	return nil
 }
+
 func sendEmail(to []string, subject, body, sender, password, smtpHost, smtpPort string) error {
 	msg := "From: " + sender + "\n" +
 		"To: " + to[0] + "\n" +
